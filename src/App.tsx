@@ -1,23 +1,54 @@
-import React, { FC, useState } from "react";
+import React, { FC, ChangeEvent, useState } from "react";
 import "./App.css";
+import TodoTask from "./Components/TodoTask";
+import { ITask } from "./Interfaces";
 
 const App: FC = () => {
   const [task, setTask] = useState<string>(""); // 타입지정
   const [deadline, setDeadline] = useState<number>(0);
-  const [todo, setTodo] = useState([]);
+  const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
 
-  const handleChange = () => {};
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (e.target.name === "task") {
+      setTask(e.target.value);
+    } else {
+      setDeadline(Number(e.target.value)); // Number가 없을경우 에러 (타입오류)
+    }
+  };
+
+  const addTask = (): void => {
+    const newTask = { taskName: task, deadline: deadline };
+    setTodo([...todo, newTask]);
+    setTask(""); // 입력후 input창 초기화
+    setDeadline(0);
+  };
 
   return (
     <div className="App">
       <div className="header">
         <div className="inputContainer">
-          <input type="text" placeholder="Task..." />
-          <input type="number" placeholder="Deadline(in Days)..." />
+          <input
+            type="text"
+            placeholder="Task..."
+            name="task"
+            value={task}
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            placeholder="Deadline(in Days)..."
+            name="deadline"
+            value={deadline}
+            onChange={handleChange}
+          />
         </div>
-        <button> Add Task </button>
+        <button onClick={addTask}> Add Task </button>
       </div>
-      <div className="todoList"></div>
+      <div className="todoList">
+        {todo.map((task: ITask, key: number) => {
+          return <TodoTask key={key} task={task} />;
+        })}
+      </div>
     </div>
   );
 };
