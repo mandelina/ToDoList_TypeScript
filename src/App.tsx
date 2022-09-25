@@ -1,12 +1,14 @@
-import React, { FC, ChangeEvent, useState } from "react";
+import { FC, ChangeEvent, useState, useRef } from "react";
 import "./App.css";
 import TodoTask from "./Components/TodoTask";
+import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
 
 const App: FC = () => {
   const [task, setTask] = useState<string>(""); // 타입지정
   const [deadline, setDeadline] = useState<number>(0);
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
+  let nextId = useRef(1);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.name === "task") {
@@ -16,30 +18,34 @@ const App: FC = () => {
     }
   };
 
+  // 할일 추가
   const addTask = (): void => {
-    const newTask = { taskName: task, deadline: deadline };
+    let newTask = { id: nextId.current, taskName: task, deadline: deadline };
     setTodo([...todo, newTask]);
     setTask(""); // 입력후 input창 초기화
     setDeadline(0);
+    nextId.current++;
   };
 
-  const completeTask = (taskNameToDelete: string): void => {
+  // 할일 삭제
+  const completeTask = (taskIdToDelete: number): void => {
     setTodo(
       todo.filter((task) => {
-        return task.taskName !== taskNameToDelete; //  완료한 일은 삭제
+        return task.id !== taskIdToDelete; //  완료한 일은 삭제
       })
     );
   };
 
   return (
     <div className="App">
-      <h1 className="heading">ToDoList</h1>
+      <Heading />
       <div className="wrapper">
         <div className="header">
           <div className="inputContainer">
             <input
               type="text"
-              placeholder="Task..."
+              placeholder="할 일을 작성하세요!"
+              maxLength={18}
               name="task"
               value={task}
               onChange={handleChange}
@@ -54,13 +60,15 @@ const App: FC = () => {
           </div>
           <button onClick={addTask}> Add Task </button>
         </div>
-        <div className="todoList">
-          {todo.map((task: ITask, key: number) => {
-            return (
-              <TodoTask key={key} task={task} completeTask={completeTask} />
-            );
-          })}
-        </div>
+        <ul className="todoLists">
+          <li className="todoList">
+            {todo.map((task: ITask, key: number) => {
+              return (
+                <TodoTask key={key} task={task} completeTask={completeTask} />
+              );
+            })}
+          </li>
+        </ul>
       </div>
     </div>
   );
