@@ -7,25 +7,24 @@ import { ITask } from "./Interfaces";
 
 const App: FC = () => {
   const [task, setTask] = useState<string>(""); // 타입지정
-  const [deadline, setDeadline] = useState<number>(0);
+  // const [deadline, setDeadline] = useState<number>(0);
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
   let nextId = useRef(1);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.name === "task") {
-      setTask(e.target.value);
-    } else {
-      setDeadline(Number(e.target.value)); // Number가 없을경우 에러 (타입오류)
-    }
+    setTask(e.target.value);
   };
 
   // 할일 추가
   const addTask = (): void => {
-    let newTask = { id: nextId.current, taskName: task, deadline: deadline };
-    setTodo([...todo, newTask]);
-    setTask(""); // 입력후 input창 초기화
-    setDeadline(0);
-    nextId.current++;
+    let newTask = { id: nextId.current, taskName: task };
+    if (newTask.taskName.length === 0) {
+      alert("1글자 이상 입력해주세요!");
+    } else {
+      setTodo([...todo, newTask]);
+      setTask(""); // 입력후 input창 초기화
+      nextId.current++;
+    }
   };
 
   // 할일 삭제
