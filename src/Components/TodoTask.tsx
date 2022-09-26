@@ -9,15 +9,12 @@ interface Props {
 
 const TodoTask = ({ task, completeTask }: Props) => {
   return (
-    <div className="task">
-      <div className="content">
-        <span className="taskNameInput"> {task.taskName}</span>
-        <span className="dayInput"> 기간: {task.deadline}일</span>
-      </div>
+    <li className="task">
+      <span className="taskNameInput"> {task.taskName}</span>
       <button onClick={() => completeTask(task.id)}>
         <img className="delete_btn" src={delete_btn} alt="" />
       </button>
-    </div>
+    </li>
   );
 };
 
