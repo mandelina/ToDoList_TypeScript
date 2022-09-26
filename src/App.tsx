@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState, useRef } from "react";
+import { FC, ChangeEvent, KeyboardEvent, useState, useRef } from "react";
 import "./App.css";
 import "./reset.css";
 import TodoTask from "./Components/TodoTask";
@@ -27,6 +27,13 @@ const App: FC = () => {
     }
   };
 
+  //enter키 누를시 추가
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addTask();
+    }
+  };
+
   // 할일 삭제
   const completeTask = (taskIdToDelete: number): void => {
     setTodo(
@@ -48,6 +55,7 @@ const App: FC = () => {
             name="task"
             value={task}
             onChange={handleChange}
+            onKeyPress={handleKeyPress}
           />
           <button onClick={addTask}> 추가 </button>
         </div>
