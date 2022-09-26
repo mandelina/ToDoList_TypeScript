@@ -10,7 +10,7 @@ interface Props {
 const TodoTask = ({ task, completeTask }: Props) => {
   return (
     <li className="task">
-      <span className="taskNameInput"> {task.taskName}</span>
+      <p className="taskNameInput"> {task.taskName}</p>
       <button onClick={() => completeTask(task.id)}>
         <img className="delete_btn" src={delete_btn} alt="" />
       </button>

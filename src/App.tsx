@@ -1,5 +1,6 @@
 import { FC, ChangeEvent, useState, useRef } from "react";
 import "./App.css";
+import "./reset.css";
 import TodoTask from "./Components/TodoTask";
 import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
@@ -40,34 +41,23 @@ const App: FC = () => {
     <div className="App">
       <Heading />
       <div className="wrapper">
-        <div className="header">
-          <div className="inputContainer">
-            <input
-              type="text"
-              placeholder="할 일을 작성하세요!"
-              maxLength={18}
-              name="task"
-              value={task}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              placeholder="Deadline(in Days)..."
-              name="deadline"
-              value={deadline}
-              onChange={handleChange}
-            />
-          </div>
-          <button onClick={addTask}> Add Task </button>
+        <div className="addTask">
+          <input
+            type="text"
+            placeholder="할 일을 작성하세요!"
+            maxLength={25}
+            name="task"
+            value={task}
+            onChange={handleChange}
+          />
+          <button onClick={addTask}> 추가 </button>
         </div>
-        <ul className="todoLists">
-          <li className="todoList">
-            {todo.map((task: ITask, key: number) => {
-              return (
-                <TodoTask key={key} task={task} completeTask={completeTask} />
-              );
-            })}
-          </li>
+        <ul className="todoList">
+          {todo.map((task: ITask, key: number) => {
+            return (
+              <TodoTask key={key} task={task} completeTask={completeTask} />
+            );
+          })}
         </ul>
       </div>
     </div>
