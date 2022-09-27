@@ -1,17 +1,22 @@
 import { ITask } from "../Interfaces";
-
 import delete_btn from "../assets/delete.svg";
 
 interface Props {
   task: ITask;
-  completeTask(taskNameToDelete: number): void;
+  completeTask(taskIdToComplete: number): void;
+  deleteTask(taskNameToDelete: number): void;
 }
 
-const TodoTask = ({ task, completeTask }: Props) => {
+const TodoTask = ({ task, deleteTask, completeTask }: Props) => {
   return (
-    <li className="task">
+    <li className={"task" + (task.checked ? " completeTask" : "")}>
+      <input
+        className="checkBox "
+        type="checkbox"
+        onChange={() => completeTask(task.id)}
+      />
       <p className="taskNameInput"> {task.taskName}</p>
-      <button onClick={() => completeTask(task.id)}>
+      <button onClick={() => deleteTask(task.id)}>
         <img className="delete_btn" src={delete_btn} alt="" />
       </button>
     </li>
