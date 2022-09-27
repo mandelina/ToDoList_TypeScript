@@ -13,12 +13,15 @@ import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
 
 const App: FC = () => {
-  const [task, setTask] = useState<string>("");
+  const [task, setTask] = useState<string>(""); // 할 일 추가
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
+  const [reviseTask, setReviseTask] = useState<string>(""); // 할 일 수정
 
   let nextId = useRef(1);
 
-  useEffect(() => {}, [todo]);
+  useEffect(() => {
+    console.log(todo);
+  }, [todo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setTask(e.target.value);
@@ -26,14 +29,18 @@ const App: FC = () => {
 
   // 할일 추가
   const addTask = (): void => {
-    let newTask = { id: nextId.current, taskName: task, checked: false };
+    let newTask = {
+      id: nextId.current,
+      taskName: task,
+      checked: false,
+      revise: false,
+    };
     if (newTask.taskName.length === 0) {
       alert("1글자 이상 입력해주세요!");
     } else {
       setTodo([...todo, newTask]);
       setTask(""); // 입력후 input창 초기화
       nextId.current++;
-      console.log(todo);
     }
   };
 
@@ -62,7 +69,29 @@ const App: FC = () => {
           : todo
       )
     );
-    console.log(todo);
+  };
+
+  //할일 수정 input창
+  const modifyTask = (e: any, taskIdToModify: number): void => {
+    if (e.detail === 2) {
+      // 더블클릭시
+      console.log("더블 클릭");
+
+      setTodo(
+        todo.map((todo) =>
+          todo.id === taskIdToModify ? { ...todo, revise: true } : todo
+        )
+      );
+    }
+  };
+
+  // input창을 나갔을때 안보이게 하기
+  const focusOut = (e: any, taskIdToFocusOut: number): void => {
+    setTodo(
+      todo.map((todo) =>
+        todo.id === taskIdToFocusOut ? { ...todo, revise: false } : todo
+      )
+    );
   };
 
   return (
@@ -89,6 +118,8 @@ const App: FC = () => {
                 task={task}
                 deleteTask={deleteTask}
                 completeTask={completeTask}
+                modifyTask={modifyTask}
+                focusOut={focusOut}
               />
             );
           })}

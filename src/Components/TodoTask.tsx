@@ -5,9 +5,17 @@ interface Props {
   task: ITask;
   completeTask(taskIdToComplete: number): void;
   deleteTask(taskNameToDelete: number): void;
+  modifyTask(e: any, taskIdToModify: number): void;
+  focusOut(e: any, taskIdToFocusOut: number): void;
 }
 
-const TodoTask = ({ task, deleteTask, completeTask }: Props) => {
+const TodoTask = ({
+  task,
+  deleteTask,
+  completeTask,
+  modifyTask,
+  focusOut,
+}: Props) => {
   return (
     <li className={"task" + (task.checked ? " completeTask" : "")}>
       <input
@@ -15,7 +23,15 @@ const TodoTask = ({ task, deleteTask, completeTask }: Props) => {
         type="checkbox"
         onChange={() => completeTask(task.id)}
       />
-      <p className="taskNameInput"> {task.taskName}</p>
+      <input
+        type="text"
+        className={"revise_task" + (task.revise ? "" : " nonactive")}
+        onBlur={(e) => focusOut(e, task.id)}
+      />
+      <p className="taskNameInput" onClick={(e) => modifyTask(e, task.id)}>
+        {" "}
+        {task.taskName}
+      </p>
       <button onClick={() => deleteTask(task.id)}>
         <img className="delete_btn" src={delete_btn} alt="" />
       </button>
