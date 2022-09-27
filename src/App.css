@@ -91,6 +91,17 @@ body {
   margin-left: 10px;
 }
 
+.task .revise_task {
+  position: absolute;
+  margin: 9px 0 0 34px;
+  width: 380px;
+  height: 27px;
+}
+
+.nonactive {
+  display: none;
+}
+
 .task .taskNameInput {
   box-sizing: border-box;
   display: grid;
