@@ -1,4 +1,11 @@
-import { FC, ChangeEvent, KeyboardEvent, useState, useRef } from "react";
+import {
+  FC,
+  ChangeEvent,
+  KeyboardEvent,
+  useState,
+  useRef,
+  useEffect,
+} from "react";
 import "./App.css";
 import "./reset.css";
 import TodoTask from "./Components/TodoTask";
@@ -6,10 +13,12 @@ import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
 
 const App: FC = () => {
-  const [task, setTask] = useState<string>(""); // 타입지정
-  // const [deadline, setDeadline] = useState<number>(0);
+  const [task, setTask] = useState<string>("");
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
+
   let nextId = useRef(1);
+
+  useEffect(() => {}, [todo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setTask(e.target.value);
@@ -17,13 +26,14 @@ const App: FC = () => {
 
   // 할일 추가
   const addTask = (): void => {
-    let newTask = { id: nextId.current, taskName: task };
+    let newTask = { id: nextId.current, taskName: task, checked: false };
     if (newTask.taskName.length === 0) {
       alert("1글자 이상 입력해주세요!");
     } else {
       setTodo([...todo, newTask]);
       setTask(""); // 입력후 input창 초기화
       nextId.current++;
+      console.log(todo);
     }
   };
 
@@ -35,12 +45,24 @@ const App: FC = () => {
   };
 
   // 할일 삭제
-  const completeTask = (taskIdToDelete: number): void => {
+  const deleteTask = (taskIdToDelete: number): void => {
     setTodo(
       todo.filter((task) => {
         return task.id !== taskIdToDelete; //  완료한 일은 삭제
       })
     );
+  };
+
+  //할일 완료
+  const completeTask = (taskIdToComplete: number): void => {
+    setTodo(
+      todo.map((todo) =>
+        todo.id === taskIdToComplete
+          ? { ...todo, checked: !todo.checked }
+          : todo
+      )
+    );
+    console.log(todo);
   };
 
   return (
@@ -62,7 +84,12 @@ const App: FC = () => {
         <ul className="todoList">
           {todo.map((task: ITask, key: number) => {
             return (
-              <TodoTask key={key} task={task} completeTask={completeTask} />
+              <TodoTask
+                key={key}
+                task={task}
+                deleteTask={deleteTask}
+                completeTask={completeTask}
+              />
             );
           })}
         </ul>
