@@ -1,5 +1,6 @@
 import {
   FC,
+  FormEvent,
   ChangeEvent,
   KeyboardEvent,
   useState,
@@ -75,11 +76,26 @@ const App: FC = () => {
   const modifyTask = (e: any, taskIdToModify: number): void => {
     if (e.detail === 2) {
       // 더블클릭시
-      console.log("더블 클릭");
-
       setTodo(
         todo.map((todo) =>
           todo.id === taskIdToModify ? { ...todo, revise: true } : todo
+        )
+      );
+    }
+  };
+
+  // input창에 할 일을 수정하고 enter키를 눌렀을때
+  const enterTask = (
+    e: KeyboardEvent<HTMLInputElement> & ChangeEvent<HTMLInputElement>,
+    taskIdToModify: number
+  ) => {
+    if (e.key === "Enter") {
+      console.log("엔터");
+      setTodo(
+        todo.map((todo) =>
+          todo.id === taskIdToModify
+            ? { ...todo, taskName: e.target.value, revise: true }
+            : todo
         )
       );
     }
@@ -120,6 +136,8 @@ const App: FC = () => {
                 completeTask={completeTask}
                 modifyTask={modifyTask}
                 focusOut={focusOut}
+                enterTask={enterTask}
+                // setReviseTask={setReviseTask}
               />
             );
           })}
