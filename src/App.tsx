@@ -94,7 +94,7 @@ const App: FC = () => {
       setTodo(
         todo.map((todo) =>
           todo.id === taskIdToModify
-            ? { ...todo, taskName: e.target.value, revise: true }
+            ? { ...todo, taskName: e.target.value, revise: false }
             : todo
         )
       );
@@ -136,8 +136,7 @@ const App: FC = () => {
                 completeTask={completeTask}
                 modifyTask={modifyTask}
                 focusOut={focusOut}
-                enterTask={enterTask}
-                // setReviseTask={setReviseTask}
+                enterTask={enterTask} // setReviseTask={setReviseTask}
               />
             );
           })}
