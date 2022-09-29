@@ -1,6 +1,5 @@
 import {
   FC,
-  FormEvent,
   ChangeEvent,
   KeyboardEvent,
   useState,
@@ -17,11 +16,14 @@ const App: FC = () => {
   const [task, setTask] = useState<string>(""); // 할 일 추가
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
   const [reviseTask, setReviseTask] = useState<string>(""); // 할 일 수정
-
+  let local = JSON.parse(localStorage.getItem("todos") || "");
   let nextId = useRef(1);
 
   useEffect(() => {
-    console.log(todo);
+    localStorage.setItem("todos", JSON.stringify(todo));
+    local = JSON.parse(localStorage.getItem("todos") || "");
+    console.log("todo", todo);
+    console.log("local", local);
   }, [todo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -110,6 +112,19 @@ const App: FC = () => {
     );
   };
 
+  const sortAll = (e: any) => {};
+  const sortTodo = (e: any) => {};
+  const sortComplete = (e: any) => {
+    console.log("완료한일");
+
+    return todo.filter((todo) => todo.checked);
+  };
+  const sortDelete = (e: any) => {
+    // setTodo("");
+  };
+
+  // updateTodos(todo);
+
   return (
     <div className="App">
       <Heading />
@@ -131,16 +146,27 @@ const App: FC = () => {
             return (
               <TodoTask
                 key={key}
-                task={task}
+                // task={task}
+                local={local}
                 deleteTask={deleteTask}
                 completeTask={completeTask}
                 modifyTask={modifyTask}
                 focusOut={focusOut}
-                enterTask={enterTask} // setReviseTask={setReviseTask}
+                enterTask={enterTask}
               />
             );
           })}
         </ul>
+        <div className="btn_list">
+          <button className="btn todo_all" onClick={sortAll}>
+            모두보기
+          </button>
+          <button className="btn todo_task">해야할 일</button>
+          <button className="btn todo_complete" onClick={sortComplete}>
+            완료한 일
+          </button>
+          <button className="btn all_delete">전체삭제</button>
+        </div>
       </div>
     </div>
   );
