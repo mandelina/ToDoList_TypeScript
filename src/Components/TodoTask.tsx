@@ -12,7 +12,6 @@ interface Props {
     e: KeyboardEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>,
     taskIdToModify: number
   ): void;
-  // setReviseTask: Dispatch<string>;
 }
 
 const TodoTask = ({
@@ -37,7 +36,6 @@ const TodoTask = ({
         onKeyPress={(e) => enterTask(e, task.id)}
       />
       <p className="taskNameInput" onClick={(e) => modifyTask(e, task.id)}>
-        {" "}
         {task.taskName}
       </p>
       <button onClick={() => deleteTask(task.id)}>

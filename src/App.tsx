@@ -17,12 +17,14 @@ const App: FC = () => {
   const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
   const [reviseTask, setReviseTask] = useState<string>(""); // 할 일 수정
   let local = JSON.parse(localStorage.getItem("todos") || "");
+  // let local: any = [];
+
   let nextId = useRef(1);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todo));
-    local = JSON.parse(localStorage.getItem("todos") || "");
-    console.log("todo", todo);
+    // local = JSON.parse(localStorage.getItem("todos") || "");
+    // console.log("todo", todo);
     console.log("local", local);
   }, [todo]);
 
@@ -146,8 +148,8 @@ const App: FC = () => {
             return (
               <TodoTask
                 key={key}
-                // task={task}
-                local={local}
+                task={task}
+                // local={local}
                 deleteTask={deleteTask}
                 completeTask={completeTask}
                 modifyTask={modifyTask}
