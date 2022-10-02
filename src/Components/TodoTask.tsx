@@ -1,16 +1,16 @@
-import { KeyboardEvent, ChangeEvent } from "react";
+import { KeyboardEvent, ChangeEvent, memo } from "react";
 import { ITask } from "../Interfaces";
 import delete_btn from "../assets/delete.svg";
 
 interface Props {
   task: ITask;
-  completeTask(taskIdToComplete: number): void;
-  deleteTask(taskNameToDelete: number): void;
-  modifyTask(e: any, taskIdToModify: number): void;
-  focusOut(e: any, taskIdToFocusOut: number): void;
+  completeTask(taskIdToComplete: string): void;
+  deleteTask(taskNameToDelete: string): void;
+  modifyTask(e: any, taskIdToModify: string): void;
+  focusOut(e: any, taskIdToFocusOut: string): void;
   enterTask(
     e: KeyboardEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>,
-    taskIdToModify: number
+    taskIdToModify: string
   ): void;
 }
 
@@ -45,4 +45,4 @@ const TodoTask = ({
   );
 };
 
-export default TodoTask;
+export default memo(TodoTask);

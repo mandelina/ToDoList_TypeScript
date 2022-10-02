@@ -5,19 +5,20 @@ import {
   useState,
   useRef,
   useEffect,
+  memo,
 } from "react";
 import "./App.css";
 import "./reset.css";
 import TodoTask from "./Components/TodoTask";
 import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
+import { v4 as uuidv4 } from "uuid";
+// import uuid from "react-uuid"
 
 const App: FC = () => {
   const [task, setTask] = useState<string>("");
   const [todo, setTodo] = useState<ITask[]>([]);
   const isMount = useRef(true);
-  let nextId = useRef(1);
-  console.log(isMount.current);
 
   useEffect(() => {
     //재렌더링했을때를 제외하고 localstorage를 업데이트 시켜준다.
@@ -42,7 +43,7 @@ const App: FC = () => {
   // 할일 추가
   const addTask = (): void => {
     let newTask = {
-      id: nextId.current,
+      id: uuidv4(),
       taskName: task,
       checked: false,
       revise: false,
@@ -52,7 +53,6 @@ const App: FC = () => {
     } else {
       setTodo([...todo, newTask]);
       setTask(""); // 입력후 input창 초기화
-      nextId.current++;
     }
   };
 
@@ -64,7 +64,7 @@ const App: FC = () => {
   };
 
   // 할일 삭제
-  const deleteTask = (taskIdToDelete: number): void => {
+  const deleteTask = (taskIdToDelete: string): void => {
     setTodo(
       todo.filter((task) => {
         return task.id !== taskIdToDelete; //  완료한 일은 삭제
@@ -73,7 +73,7 @@ const App: FC = () => {
   };
 
   //할일 완료
-  const completeTask = (taskIdToComplete: number): void => {
+  const completeTask = (taskIdToComplete: string): void => {
     setTodo(
       todo.map((todo) =>
         todo.id === taskIdToComplete
@@ -84,7 +84,7 @@ const App: FC = () => {
   };
 
   //할일 수정 input창
-  const modifyTask = (e: any, taskIdToModify: number): void => {
+  const modifyTask = (e: any, taskIdToModify: string): void => {
     if (e.detail === 2) {
       // 더블클릭시
       setTodo(
@@ -98,7 +98,7 @@ const App: FC = () => {
   // input창에 할 일을 수정하고 enter키를 눌렀을때
   const enterTask = (
     e: KeyboardEvent<HTMLInputElement> & ChangeEvent<HTMLInputElement>,
-    taskIdToModify: number
+    taskIdToModify: string
   ) => {
     if (e.key === "Enter") {
       setTodo(
@@ -112,7 +112,7 @@ const App: FC = () => {
   };
 
   // input창을 나갔을때 안보이게 하기
-  const focusOut = (e: any, taskIdToFocusOut: number): void => {
+  const focusOut = (e: any, taskIdToFocusOut: string): void => {
     setTodo(
       todo.map((todo) =>
         todo.id === taskIdToFocusOut ? { ...todo, revise: false } : todo
@@ -142,16 +142,15 @@ const App: FC = () => {
           <button className="add_btn" onClick={addTask}>
             추가
           </button>
-
           <button className="all_delete" onClick={sortDelete}>
             전체삭제
           </button>
         </div>
         <ul className="todoList">
-          {todo.map((task: ITask, key: number) => {
+          {todo.map((task: ITask) => {
             return (
               <TodoTask
-                key={key}
+                key={task.id}
                 task={task}
                 deleteTask={deleteTask}
                 completeTask={completeTask}
@@ -166,4 +165,4 @@ const App: FC = () => {
     </div>
   );
 };
-export default App;
+export default memo(App);
