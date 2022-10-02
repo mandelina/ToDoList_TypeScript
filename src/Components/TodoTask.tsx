@@ -27,6 +27,7 @@ const TodoTask = ({
       <input
         className="checkBox "
         type="checkbox"
+        checked={task.checked}
         onChange={() => completeTask(task.id)}
       />
       <input

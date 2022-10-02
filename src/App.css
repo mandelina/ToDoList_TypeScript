@@ -99,6 +99,7 @@ body {
 
 .task .checkBox {
   margin-left: 10px;
+  width: 20px;
 }
 
 .task .revise_task {
