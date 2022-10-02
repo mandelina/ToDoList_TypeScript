@@ -13,16 +13,27 @@ import Heading from "./Components/Heading";
 import { ITask } from "./Interfaces";
 
 const App: FC = () => {
-  const [task, setTask] = useState<string>(""); // 할 일 추가
+  const [task, setTask] = useState<string>("");
   const [todo, setTodo] = useState<ITask[]>([]);
-
-  let local = JSON.parse(localStorage.getItem("todos") || "");
+  const isMount = useRef(true);
   let nextId = useRef(1);
+  console.log(isMount.current);
 
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todo));
-    local = JSON.parse(localStorage.getItem("todos") || "");
+    //재렌더링했을때를 제외하고 localstorage를 업데이트 시켜준다.
+    if (!isMount.current) {
+      localStorage.setItem("todos", JSON.stringify(todo));
+    }
   }, [todo]);
+
+  useEffect(() => {
+    // 렌더링시 로컬스토리지에 값이 있다면 가져와서 set해주기
+    const localTodo = localStorage.getItem("todos");
+    if (localTodo !== "[]") {
+      setTodo(JSON.parse(localTodo || ""));
+    }
+    isMount.current = false;
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setTask(e.target.value);
