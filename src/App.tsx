@@ -14,18 +14,14 @@ import { ITask } from "./Interfaces";
 
 const App: FC = () => {
   const [task, setTask] = useState<string>(""); // 할 일 추가
-  const [todo, setTodo] = useState<ITask[]>([]); // 사용자가 입력 후 추적해야하는 타입이기때문
-  const [reviseTask, setReviseTask] = useState<string>(""); // 할 일 수정
-  let local = JSON.parse(localStorage.getItem("todos") || "");
-  // let local: any = [];
+  const [todo, setTodo] = useState<ITask[]>([]);
 
+  let local = JSON.parse(localStorage.getItem("todos") || "");
   let nextId = useRef(1);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todo));
-    // local = JSON.parse(localStorage.getItem("todos") || "");
-    // console.log("todo", todo);
-    console.log("local", local);
+    local = JSON.parse(localStorage.getItem("todos") || "");
   }, [todo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -94,7 +90,6 @@ const App: FC = () => {
     taskIdToModify: number
   ) => {
     if (e.key === "Enter") {
-      console.log("엔터");
       setTodo(
         todo.map((todo) =>
           todo.id === taskIdToModify
@@ -114,18 +109,10 @@ const App: FC = () => {
     );
   };
 
-  const sortAll = (e: any) => {};
-  const sortTodo = (e: any) => {};
-  const sortComplete = (e: any) => {
-    console.log("완료한일");
-
-    return todo.filter((todo) => todo.checked);
+  // 모두 삭제
+  const sortDelete = () => {
+    setTodo([]);
   };
-  const sortDelete = (e: any) => {
-    // setTodo("");
-  };
-
-  // updateTodos(todo);
 
   return (
     <div className="App">
@@ -141,7 +128,13 @@ const App: FC = () => {
             onChange={handleChange}
             onKeyPress={handleKeyPress}
           />
-          <button onClick={addTask}> 추가 </button>
+          <button className="add_btn" onClick={addTask}>
+            추가
+          </button>
+
+          <button className="all_delete" onClick={sortDelete}>
+            전체삭제
+          </button>
         </div>
         <ul className="todoList">
           {todo.map((task: ITask, key: number) => {
@@ -149,7 +142,6 @@ const App: FC = () => {
               <TodoTask
                 key={key}
                 task={task}
-                // local={local}
                 deleteTask={deleteTask}
                 completeTask={completeTask}
                 modifyTask={modifyTask}
@@ -159,16 +151,6 @@ const App: FC = () => {
             );
           })}
         </ul>
-        <div className="btn_list">
-          <button className="btn todo_all" onClick={sortAll}>
-            모두보기
-          </button>
-          <button className="btn todo_task">해야할 일</button>
-          <button className="btn todo_complete" onClick={sortComplete}>
-            완료한 일
-          </button>
-          <button className="btn all_delete">전체삭제</button>
-        </div>
       </div>
     </div>
   );
