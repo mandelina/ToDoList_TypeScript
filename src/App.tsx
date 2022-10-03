@@ -29,12 +29,12 @@ const App: FC = () => {
 
   useEffect(() => {
     // 렌더링시 로컬스토리지에 값이 있다면 가져와서 set해주기
-    const localTodo = localStorage.getItem("todos");
+    let localTodo = localStorage.getItem("todos");
     if (localTodo !== "[]") {
       setTodo(JSON.parse(localTodo));
     }
     if (!localTodo) {
-      throw new Error("No saved todos");
+      localTodo = null;
     }
     isMount.current = false;
   }, []);
