@@ -56,6 +56,9 @@ const App: FC = () => {
     } else {
       console.log(todo);
       console.log(newTask);
+      if (todo === null) {
+        setTodo([]);
+      }
       setTodo([...todo, newTask]);
       setTask(""); // 입력후 input창 초기화
     }
