@@ -30,7 +30,7 @@ const App: FC = () => {
   useEffect(() => {
     // 렌더링시 로컬스토리지에 값이 있다면 가져와서 set해주기
     let localTodo = localStorage.getItem("todos");
-    if (localTodo !== "[]") {
+    if (localTodo !== "undefined" && localTodo !== "[]") {
       setTodo(JSON.parse(localTodo));
     }
     if (!localTodo) {
