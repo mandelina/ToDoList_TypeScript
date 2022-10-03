@@ -6,8 +6,11 @@ interface Props {
   task: ITask;
   completeTask(taskIdToComplete: string): void;
   deleteTask(taskNameToDelete: string): void;
-  modifyTask(e: any, taskIdToModify: string): void;
-  focusOut(e: any, taskIdToFocusOut: string): void;
+  modifyTask(
+    e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
+    taskIdToModify: string
+  ): void;
+  focusOut(taskIdToFocusOut: string): void;
   enterTask(
     e: KeyboardEvent<HTMLInputElement> | ChangeEvent<HTMLInputElement>,
     taskIdToModify: string
@@ -33,7 +36,7 @@ const TodoTask = ({
       <input
         type="text"
         className={"revise_task" + (task.revise ? "" : " nonactive")}
-        onBlur={(e) => focusOut(e, task.id)}
+        onBlur={() => focusOut(task.id)}
         onKeyPress={(e) => enterTask(e, task.id)}
       />
       <p className="taskNameInput" onClick={(e) => modifyTask(e, task.id)}>

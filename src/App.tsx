@@ -31,7 +31,10 @@ const App: FC = () => {
     // 렌더링시 로컬스토리지에 값이 있다면 가져와서 set해주기
     const localTodo = localStorage.getItem("todos");
     if (localTodo !== "[]") {
-      setTodo(JSON.parse(localTodo || ""));
+      setTodo(JSON.parse(localTodo));
+    }
+    if (!localTodo) {
+      throw new Error("No saved todos");
     }
     isMount.current = false;
   }, []);
@@ -84,7 +87,10 @@ const App: FC = () => {
   };
 
   //할일 수정 input창
-  const modifyTask = (e: any, taskIdToModify: string): void => {
+  const modifyTask = (
+    e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
+    taskIdToModify: string
+  ): void => {
     if (e.detail === 2) {
       // 더블클릭시
       setTodo(
@@ -112,7 +118,7 @@ const App: FC = () => {
   };
 
   // input창을 나갔을때 안보이게 하기
-  const focusOut = (e: any, taskIdToFocusOut: string): void => {
+  const focusOut = (taskIdToFocusOut: string): void => {
     setTodo(
       todo.map((todo) =>
         todo.id === taskIdToFocusOut ? { ...todo, revise: false } : todo
