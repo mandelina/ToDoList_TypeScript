@@ -153,7 +153,7 @@ const App: FC = () => {
           </button>
         </div>
         <ul className="todoList">
-          {todo.map((task: ITask) => {
+          {todo?.map((task: ITask) => {
             return (
               <TodoTask
                 key={task.id}
