@@ -34,7 +34,7 @@ const App: FC = () => {
       setTodo(JSON.parse(localTodo));
     }
     if (!localTodo) {
-      localTodo = null;
+      localTodo = "[]";
     }
     isMount.current = false;
   }, []);
