@@ -54,6 +54,8 @@ const App: FC = () => {
     if (newTask.taskName.length === 0) {
       alert("1글자 이상 입력해주세요!");
     } else {
+      console.log(todo);
+      console.log(newTask);
       setTodo([...todo, newTask]);
       setTask(""); // 입력후 input창 초기화
     }
